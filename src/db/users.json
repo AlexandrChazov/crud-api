@@ -1,0 +1,8 @@
+{
+	"1": {
+		"id": 1,
+		"username": "Alex",
+		"age": "38",
+		"hobbies": ["node.js","piano","cycling"]
+	}
+}
