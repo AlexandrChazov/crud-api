@@ -5,7 +5,10 @@
   "main": "src/main.ts",
   "type": "commonjs",
   "scripts": {
-    "start:dev": "nodemon --exec ts-node src/main.ts --project ./tsconfig.json"
+    "start:dev": "nodemon --exec ts-node src/main.ts --project ./tsconfig.json",
+    "format": "prettier --write \"src/**/*.{js,mjs,cjs,ts}\"",
+    "lint": "eslint \"src/**/*.{js,mjs,cjs,ts}\" --fix",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -26,10 +29,22 @@
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.9.0",
+    "husky": "^9.1.6",
     "nodemon": "^3.1.7",
     "prettier": "3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.7.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,jsx,tsx}": [
+      "npm run lint",
+      "npm run format"
+    ]
   }
 }

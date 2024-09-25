@@ -1,1 +1,1 @@
-export {start} from "./start";
+export { start } from "./start";

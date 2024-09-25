@@ -1,4 +1,3 @@
-import {start} from "./lib";
-
+import { start } from "./lib";
 
 start();
