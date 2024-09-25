@@ -1,0 +1,29 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "CRUD API uses in-memory database underneath",
+  "main": "src/main.ts",
+  "type": "commonjs",
+  "scripts": {
+    "start:dev": "nodemon --exec ts-node src/main.ts --project ./tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexandrChazov/crud-api.git"
+  },
+  "keywords": [
+    "node.js"
+  ],
+  "author": "Alexandr Chazov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexandrChazov/crud-api/issues"
+  },
+  "homepage": "https://github.com/AlexandrChazov/crud-api#readme",
+  "devDependencies": {
+    "@types/node": "^22.5.5",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}
