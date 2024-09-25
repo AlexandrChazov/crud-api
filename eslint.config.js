@@ -1,6 +1,7 @@
 const globals = require("globals");
 const pluginJs = require("@eslint/js");
 const tseslint = require("typescript-eslint");
+const eslintConfigPrettier = require("eslint-config-prettier");
 
 const config = [
 	pluginJs.configs.recommended,
@@ -13,6 +14,7 @@ const config = [
 		},
 		files: ["src/**/*.{js}"],
 	},
+	eslintConfigPrettier
 ];
 
 module.exports = config;
