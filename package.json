@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "start:dev": "nodemon",
+    "start:prod": "npm run build && node dist/main",
+    "build": "npx tsc",
     "format": "prettier --write \"src/**/*.{js,mjs,cjs,ts}\"",
     "lint": "eslint \"src/**/*.{js,mjs,cjs,ts}\" --fix",
     "prepare": "husky"
