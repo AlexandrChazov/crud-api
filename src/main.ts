@@ -3,7 +3,7 @@ import { readFile } from "fs";
 
 const server = createServer((req, res) => {
 	if (req.method === "GET" && req.url === "/api/users") {
-		readFile("src/db/users.json", "utf-8", (err, data) => {
+		readFile(`${import.meta.dirname}/db/users.json`, "utf-8", (err, data) => {
 			if (err) {
 				console.log(err);
 			} else {

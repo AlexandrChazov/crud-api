@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "CRUD API uses in-memory database underneath",
   "main": "src/main.ts",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
-    "start:dev": "nodemon --exec ts-node src/main.ts --project ./tsconfig.json",
+    "start:dev": "nodemon",
     "format": "prettier --write \"src/**/*.{js,mjs,cjs,ts}\"",
     "lint": "eslint \"src/**/*.{js,mjs,cjs,ts}\" --fix",
     "prepare": "husky"
