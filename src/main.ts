@@ -3,6 +3,9 @@ import { readFile, writeFile } from "fs";
 import { v4, validate } from "uuid";
 import { userId } from "./lib/userId.js";
 import { serverError } from "./lib/serverError.js";
+import { config } from "dotenv";
+
+config();
 
 const server = createServer((req, res) => {
 	if (req.method === "GET" && req.url === "/api/users") {
@@ -144,9 +147,9 @@ const server = createServer((req, res) => {
 	});
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 server.listen(PORT, () => {
-	console.log(`Server running at port ${PORT}`);
+	process.stdout.write(`Server running at port ${PORT}`);
 });
 
 function pathToDb() {
