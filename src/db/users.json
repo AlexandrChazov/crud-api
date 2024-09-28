@@ -1,8 +1,28 @@
 {
-	"1": {
-		"id": 1,
-		"username": "Alex",
-		"age": "38",
-		"hobbies": ["node.js","piano","cycling"]
-	}
+  "b90ab7c2-90a0-40e6-80ff-c3b7006e659b": {
+    "id": "b90ab7c2-90a0-40e6-80ff-c3b7006e659b",
+    "username": "Alex",
+    "age": "38",
+    "hobbies": [
+      "node.js",
+      "piano",
+      "cycling"
+    ]
+  },
+  "1707250c-ed29-4e29-8e54-15fa10a2c491": {
+    "id": "1707250c-ed29-4e29-8e54-15fa10a2c491",
+    "username": "Alexey",
+    "age": "25",
+    "hobbies": [
+      "food"
+    ]
+  },
+  "b27566e7-0f6d-4c5c-875e-3c5fc243156f": {
+    "id": "b27566e7-0f6d-4c5c-875e-3c5fc243156f",
+    "username": "John",
+    "age": 46,
+    "hobbies": [
+      "alcohol"
+    ]
+  }
 }
