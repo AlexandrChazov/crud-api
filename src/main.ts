@@ -1,16 +1,15 @@
-import { createServer, IncomingMessage, ServerResponse } from "http";
+import { createServer } from "http";
 import { readFile, writeFile } from "fs";
-import path from "path";
 import { v4, validate } from "uuid";
 import { config } from "dotenv";
+import { pathToDb, serverError, userId } from "./lib";
 import "./db/users.json" assert { type: "json" };
-import { fileURLToPath } from "url";
 
 config();
 
 const server = createServer((req, res) => {
 	if (req.method === "GET" && req.url === "/api/users") {
-		readFile(pathToDb(), "utf-8", (err, data) => {
+		readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
 			if (err) {
 				serverError(res);
 			} else {
@@ -25,7 +24,7 @@ const server = createServer((req, res) => {
 			res.writeHead(400);
 			res.end("Invalid user id");
 		} else {
-			readFile(pathToDb(), "utf-8", (err, data) => {
+			readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
 				if (err) {
 					serverError(res);
 				} else {
@@ -55,16 +54,20 @@ const server = createServer((req, res) => {
 					id: v4(),
 					...body,
 				};
-				readFile(pathToDb(), "utf-8", (err, data) => {
+				readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
 					if (err) {
 						serverError(res);
 					} else {
 						const users = JSON.parse(data);
 						users[newUser.id] = newUser;
-						writeFile(pathToDb(), JSON.stringify(users, null, 2), () => {
-							res.writeHead(201, { "Content-type": "application/json" });
-							res.end(JSON.stringify(newUser));
-						});
+						writeFile(
+							pathToDb(import.meta.url),
+							JSON.stringify(users, null, 2),
+							() => {
+								res.writeHead(201, { "Content-type": "application/json" });
+								res.end(JSON.stringify(newUser));
+							},
+						);
 					}
 				});
 			}
@@ -81,7 +84,7 @@ const server = createServer((req, res) => {
 				res.writeHead(400);
 				res.end("Invalid user id");
 			} else {
-				readFile(pathToDb(), "utf-8", (err, data) => {
+				readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
 					if (err) {
 						serverError(res);
 					} else {
@@ -94,10 +97,14 @@ const server = createServer((req, res) => {
 							if (body.username) user.username = body.username;
 							if (body.age) user.age = body.age;
 							if (body.hobbies) user.hobbies = body.hobbies;
-							writeFile(pathToDb(), JSON.stringify(users, null, 2), () => {
-								res.writeHead(200, { "Content-type": "application/json" });
-								res.end(JSON.stringify(users[id]));
-							});
+							writeFile(
+								pathToDb(import.meta.url),
+								JSON.stringify(users, null, 2),
+								() => {
+									res.writeHead(200, { "Content-type": "application/json" });
+									res.end(JSON.stringify(users[id]));
+								},
+							);
 						}
 					}
 				});
@@ -109,7 +116,7 @@ const server = createServer((req, res) => {
 			res.writeHead(400);
 			res.end("Invalid user id");
 		} else {
-			readFile(pathToDb(), "utf-8", (err, data) => {
+			readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
 				if (err) {
 					serverError(res);
 				} else {
@@ -119,10 +126,14 @@ const server = createServer((req, res) => {
 						res.end("User doesn't exist");
 					} else {
 						delete users[id];
-						writeFile(pathToDb(), JSON.stringify(users, null, 2), () => {
-							res.writeHead(204, { "Content-type": "application/json" });
-							res.end();
-						});
+						writeFile(
+							pathToDb(import.meta.url),
+							JSON.stringify(users, null, 2),
+							() => {
+								res.writeHead(204, { "Content-type": "application/json" });
+								res.end();
+							},
+						);
 					}
 				}
 			});
@@ -131,37 +142,13 @@ const server = createServer((req, res) => {
 		res.writeHead(404, { "Content-type": "text/plain" });
 		res.end("The endpoint doesn't exist");
 	}
-	process.on("uncaughtException", (err) => {
-		console.log(err);
-		res.end(err);
-		// serverError(res);
+	process.on("uncaughtException", () => {
+		serverError(res);
 	});
 });
 
 const PORT = process.env.PORT;
+
 server.listen(PORT, () => {
 	process.stdout.write(`Server running at port ${PORT}`);
 });
-
-function pathToDb() {
-	return `${dirname(import.meta.url)}/db/users.json`;
-}
-
-function userId(url = ""): string {
-	return url.split("/")[3] || "";
-}
-
-function serverError(
-	res: ServerResponse<IncomingMessage> & { req: IncomingMessage },
-): void {
-	res.writeHead(500);
-	res.end("Something went wrong");
-}
-
-function filename(metaUrl: string): string {
-	return fileURLToPath(metaUrl);
-}
-
-function dirname(metaUrl: string): string {
-	return path.dirname(filename(metaUrl));
-}
