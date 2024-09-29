@@ -1,8 +1,9 @@
 import { IncomingMessage, ServerResponse } from "http";
+import { EStatus } from "../enums";
 
 export function serverError(
 	res: ServerResponse<IncomingMessage> & { req: IncomingMessage },
 ): void {
-	res.writeHead(500);
+	res.writeHead(EStatus.SERVER_ERROR);
 	res.end("Something went wrong");
 }

@@ -4,6 +4,7 @@ import { v4, validate } from "uuid";
 import { config } from "dotenv";
 import { pathToDb, serverError, userId } from "./lib";
 import "./db/users.json" assert { type: "json" };
+import { EStatus } from "./enums";
 
 config();
 
@@ -14,14 +15,14 @@ export const server = createServer((req, res) => {
 				serverError(res);
 			} else {
 				const users = JSON.parse(data);
-				res.writeHead(200, { "Content-type": "application/json" });
+				res.writeHead(EStatus.OK, { "Content-type": "application/json" });
 				res.end(JSON.stringify(Object.values(users)));
 			}
 		});
 	} else if (req.method === "GET" && req.url?.includes("/api/users/")) {
 		const id = userId(req.url);
 		if (!validate(id)) {
-			res.writeHead(400);
+			res.writeHead(EStatus.BAD_REQUEST);
 			res.end("Invalid user id");
 		} else {
 			readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
@@ -30,10 +31,10 @@ export const server = createServer((req, res) => {
 				} else {
 					const users = JSON.parse(data);
 					if (!users[id]) {
-						res.writeHead(404);
+						res.writeHead(EStatus.NOT_FOUND);
 						res.end("User doesn't exist");
 					} else {
-						res.writeHead(200, { "Content-type": "application/json" });
+						res.writeHead(EStatus.OK, { "Content-type": "application/json" });
 						res.end(JSON.stringify(users[id]));
 					}
 				}
@@ -47,7 +48,7 @@ export const server = createServer((req, res) => {
 		req.on("end", () => {
 			const body = JSON.parse(file);
 			if (!body.username || !body.age || !body.hobbies) {
-				res.writeHead(400);
+				res.writeHead(EStatus.BAD_REQUEST);
 				res.end("Fields username, age, hobbies are required");
 			} else {
 				const newUser = {
@@ -64,7 +65,9 @@ export const server = createServer((req, res) => {
 							pathToDb(import.meta.url),
 							JSON.stringify(users, null, 2),
 							() => {
-								res.writeHead(201, { "Content-type": "application/json" });
+								res.writeHead(EStatus.CREATED, {
+									"Content-type": "application/json",
+								});
 								res.end(JSON.stringify(newUser));
 							},
 						);
@@ -81,7 +84,7 @@ export const server = createServer((req, res) => {
 			const body = JSON.parse(file);
 			const id = userId(req.url);
 			if (!validate(id)) {
-				res.writeHead(400);
+				res.writeHead(EStatus.BAD_REQUEST);
 				res.end("Invalid user id");
 			} else {
 				readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
@@ -91,7 +94,7 @@ export const server = createServer((req, res) => {
 						const users = JSON.parse(data);
 						const user = users[id];
 						if (!user) {
-							res.writeHead(404);
+							res.writeHead(EStatus.NOT_FOUND);
 							res.end("User doesn't exist");
 						} else {
 							if (body.username) user.username = body.username;
@@ -101,7 +104,9 @@ export const server = createServer((req, res) => {
 								pathToDb(import.meta.url),
 								JSON.stringify(users, null, 2),
 								() => {
-									res.writeHead(200, { "Content-type": "application/json" });
+									res.writeHead(EStatus.OK, {
+										"Content-type": "application/json",
+									});
 									res.end(JSON.stringify(users[id]));
 								},
 							);
@@ -113,7 +118,7 @@ export const server = createServer((req, res) => {
 	} else if (req.method === "DELETE" && req.url?.includes("/api/users/")) {
 		const id = userId(req.url);
 		if (!validate(id)) {
-			res.writeHead(400);
+			res.writeHead(EStatus.BAD_REQUEST);
 			res.end("Invalid user id");
 		} else {
 			readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
@@ -122,7 +127,7 @@ export const server = createServer((req, res) => {
 				} else {
 					const users = JSON.parse(data);
 					if (!users[id]) {
-						res.writeHead(404);
+						res.writeHead(EStatus.NOT_FOUND);
 						res.end("User doesn't exist");
 					} else {
 						delete users[id];
@@ -130,7 +135,7 @@ export const server = createServer((req, res) => {
 							pathToDb(import.meta.url),
 							JSON.stringify(users, null, 2),
 							() => {
-								res.writeHead(204);
+								res.writeHead(EStatus.NO_CONTENT);
 								res.end();
 							},
 						);
@@ -140,11 +145,11 @@ export const server = createServer((req, res) => {
 		}
 	} else if (req.method === "DELETE" && req.url?.includes("test/data")) {
 		writeFile(pathToDb(import.meta.url), JSON.stringify({}, null, 2), () => {
-			res.writeHead(204);
+			res.writeHead(EStatus.NO_CONTENT);
 			res.end();
 		});
 	} else {
-		res.writeHead(404, { "Content-type": "text/plain" });
+		res.writeHead(EStatus.NOT_FOUND, { "Content-type": "text/plain" });
 		res.end("The endpoint doesn't exist");
 	}
 	process.on("uncaughtException", () => {
