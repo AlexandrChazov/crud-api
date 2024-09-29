@@ -7,7 +7,7 @@ import "./db/users.json" assert { type: "json" };
 
 config();
 
-const server = createServer((req, res) => {
+export const server = createServer((req, res) => {
 	if (req.method === "GET" && req.url === "/api/users") {
 		readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
 			if (err) {
@@ -130,7 +130,7 @@ const server = createServer((req, res) => {
 							pathToDb(import.meta.url),
 							JSON.stringify(users, null, 2),
 							() => {
-								res.writeHead(204, { "Content-type": "application/json" });
+								res.writeHead(204);
 								res.end();
 							},
 						);
@@ -138,6 +138,11 @@ const server = createServer((req, res) => {
 				}
 			});
 		}
+	} else if (req.method === "DELETE" && req.url?.includes("test/data")) {
+		writeFile(pathToDb(import.meta.url), JSON.stringify({}, null, 2), () => {
+			res.writeHead(204);
+			res.end();
+		});
 	} else {
 		res.writeHead(404, { "Content-type": "text/plain" });
 		res.end("The endpoint doesn't exist");
