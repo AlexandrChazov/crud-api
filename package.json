@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "start:dev": "nodemon",
-    "start:prod": "npm run build && node dist/main",
-    "build": "npx tsc",
+    "start:prod": "npm run build && node dist/main.cjs",
+    "build": "npx webpack",
     "format": "prettier --write \"src/**/*.{js,mjs,cjs,ts}\"",
     "lint": "eslint \"src/**/*.{js,mjs,cjs,ts}\" --fix",
     "prepare": "husky"
@@ -50,8 +50,11 @@
     "husky": "^9.1.6",
     "nodemon": "^3.1.7",
     "prettier": "3.3.3",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
-    "typescript-eslint": "^8.7.0"
+    "typescript-eslint": "^8.7.0",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
   }
 }

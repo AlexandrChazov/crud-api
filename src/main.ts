@@ -1,15 +1,16 @@
-import { createServer } from "http";
+import { createServer, IncomingMessage, ServerResponse } from "http";
 import { readFile, writeFile } from "fs";
+import path from "path";
 import { v4, validate } from "uuid";
-import { userId } from "./lib/userId.js";
-import { serverError } from "./lib/serverError.js";
 import { config } from "dotenv";
+import "./db/users.json" assert { type: "json" };
+import { fileURLToPath } from "url";
 
 config();
 
 const server = createServer((req, res) => {
 	if (req.method === "GET" && req.url === "/api/users") {
-		readFile(`${import.meta.dirname}/db/users.json`, "utf-8", (err, data) => {
+		readFile(pathToDb(), "utf-8", (err, data) => {
 			if (err) {
 				serverError(res);
 			} else {
@@ -60,14 +61,10 @@ const server = createServer((req, res) => {
 					} else {
 						const users = JSON.parse(data);
 						users[newUser.id] = newUser;
-						writeFile(
-							`${import.meta.dirname}/db/users.json`,
-							JSON.stringify(users, null, 2),
-							() => {
-								res.writeHead(201, { "Content-type": "application/json" });
-								res.end(JSON.stringify(newUser));
-							},
-						);
+						writeFile(pathToDb(), JSON.stringify(users, null, 2), () => {
+							res.writeHead(201, { "Content-type": "application/json" });
+							res.end(JSON.stringify(newUser));
+						});
 					}
 				});
 			}
@@ -97,14 +94,10 @@ const server = createServer((req, res) => {
 							if (body.username) user.username = body.username;
 							if (body.age) user.age = body.age;
 							if (body.hobbies) user.hobbies = body.hobbies;
-							writeFile(
-								`${import.meta.dirname}/db/users.json`,
-								JSON.stringify(users, null, 2),
-								() => {
-									res.writeHead(200, { "Content-type": "application/json" });
-									res.end(JSON.stringify(users[id]));
-								},
-							);
+							writeFile(pathToDb(), JSON.stringify(users, null, 2), () => {
+								res.writeHead(200, { "Content-type": "application/json" });
+								res.end(JSON.stringify(users[id]));
+							});
 						}
 					}
 				});
@@ -126,14 +119,10 @@ const server = createServer((req, res) => {
 						res.end("User doesn't exist");
 					} else {
 						delete users[id];
-						writeFile(
-							`${import.meta.dirname}/db/users.json`,
-							JSON.stringify(users, null, 2),
-							() => {
-								res.writeHead(204, { "Content-type": "application/json" });
-								res.end();
-							},
-						);
+						writeFile(pathToDb(), JSON.stringify(users, null, 2), () => {
+							res.writeHead(204, { "Content-type": "application/json" });
+							res.end();
+						});
 					}
 				}
 			});
@@ -142,8 +131,10 @@ const server = createServer((req, res) => {
 		res.writeHead(404, { "Content-type": "text/plain" });
 		res.end("The endpoint doesn't exist");
 	}
-	process.on("uncaughtException", () => {
-		serverError(res);
+	process.on("uncaughtException", (err) => {
+		console.log(err);
+		res.end(err);
+		// serverError(res);
 	});
 });
 
@@ -153,5 +144,24 @@ server.listen(PORT, () => {
 });
 
 function pathToDb() {
-	return `${import.meta.dirname}/db/users.json`;
+	return `${dirname(import.meta.url)}/db/users.json`;
+}
+
+function userId(url = ""): string {
+	return url.split("/")[3] || "";
+}
+
+function serverError(
+	res: ServerResponse<IncomingMessage> & { req: IncomingMessage },
+): void {
+	res.writeHead(500);
+	res.end("Something went wrong");
+}
+
+function filename(metaUrl: string): string {
+	return fileURLToPath(metaUrl);
+}
+
+function dirname(metaUrl: string): string {
+	return path.dirname(filename(metaUrl));
 }

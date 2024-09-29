@@ -13,6 +13,7 @@ export default [
 			"no-undef": "error",
 		},
 		files: ["src/**/*.{ts}"],
+		ignores: ["!src/*"],
 	},
 	eslintConfigPrettier,
 ];
