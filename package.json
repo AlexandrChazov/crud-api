@@ -5,7 +5,7 @@
   "main": "src/main.ts",
   "type": "module",
   "scripts": {
-    "start:dev": "nodemon",
+    "start:dev": "nodemon --inspect src/main.ts",
     "start:prod": "npm run build && node dist/main.cjs",
     "build": "npx webpack",
     "format": "prettier --write \"src/**/*.{js,mjs,cjs,ts}\"",

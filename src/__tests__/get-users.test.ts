@@ -1,18 +1,18 @@
 import request from "supertest";
-import { server } from "../main";
+import { app } from "../main";
 import { EStatus } from "../enums";
 
 describe("API", () => {
 	let userId = "";
 	beforeAll(async () => {
-		await request(server).delete("/test/data");
+		await request(app).delete("/test/data");
 	});
 	afterAll((done) => {
-		server.close();
+		app.close();
 		done();
 	});
 	it("Get users list", async () => {
-		await request(server)
+		await request(app)
 			.get("/api/users")
 			.then(() => {
 				expect(EStatus.OK);
@@ -20,7 +20,7 @@ describe("API", () => {
 			});
 	});
 	it("Create user", async () => {
-		await request(server)
+		await request(app)
 			.post("/api/users")
 			.send({ username: "Alexey", age: 25, hobbies: ["food"] })
 			.then((response) => {
@@ -32,7 +32,7 @@ describe("API", () => {
 			});
 	});
 	it("Get user", async () => {
-		await request(server)
+		await request(app)
 			.get(`/api/users/${userId}`)
 			.then((response) => {
 				expect(EStatus.OK);
@@ -42,7 +42,7 @@ describe("API", () => {
 			});
 	});
 	it("Update user", async () => {
-		await request(server)
+		await request(app)
 			.put(`/api/users/${userId}`)
 			.send({ username: "John", age: 46, hobbies: ["alcohol"] })
 			.then((response) => {
@@ -53,12 +53,12 @@ describe("API", () => {
 			});
 	});
 	it("Delete user", async () => {
-		await request(server)
+		await request(app)
 			.delete(`/api/users/${userId}`)
 			.expect(EStatus.NO_CONTENT);
 	});
 	it("Get user", async () => {
-		await request(server)
+		await request(app)
 			.get(`/api/users/${userId}`)
 			.then((response) => {
 				expect(EStatus.NOT_FOUND);
