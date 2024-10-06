@@ -7,6 +7,7 @@
   "scripts": {
     "start:dev": "nodemon --inspect src/main.ts",
     "start:prod": "npm run build && node dist/main.cjs",
+    "start:multi": "nodemon src/loadBalancer.ts",
     "build": "npx webpack",
     "format": "prettier --write \"src/**/*.{js,mjs,cjs,ts}\"",
     "lint": "eslint \"src/**/*.{js,mjs,cjs,ts}\" --fix",

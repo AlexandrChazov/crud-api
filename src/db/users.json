@@ -1,18 +1,1 @@
-{
-  "6632823e-ae1e-46f9-be73-29994f7c3e5b": {
-    "id": "6632823e-ae1e-46f9-be73-29994f7c3e5b",
-    "username": "Alexey",
-    "age": 25,
-    "hobbies": [
-      "food"
-    ]
-  },
-  "e5e66b5a-7a37-4215-89c1-f049d48e5153": {
-    "id": "e5e66b5a-7a37-4215-89c1-f049d48e5153",
-    "username": "John",
-    "age": 46,
-    "hobbies": [
-      "alcohol"
-    ]
-  }
-}
+{}

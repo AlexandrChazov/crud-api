@@ -1,6 +1,7 @@
 {
 	"restartable": "rs",
-	"watch": [ "src/" ],
+	"watch": [ "src/**/*.js,ts" ],
+	"ignore": ["src/db", "src/__tests__"],
 	"ext": "ts,js,json",
 	"exec": "node --import ./ts-loader.js",
 	"execMap": {

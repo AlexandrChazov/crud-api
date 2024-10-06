@@ -8,6 +8,7 @@ export function server(
 	req: IncomingMessage,
 	res: ServerResponse<IncomingMessage> & { req: IncomingMessage },
 ) {
+	console.log("server's PORT is", process.env.PORT);
 	if (req.method === "GET" && req.url === "/api/users") {
 		readFile(pathToDb(import.meta.url), "utf-8", (err, data) => {
 			if (err) {
