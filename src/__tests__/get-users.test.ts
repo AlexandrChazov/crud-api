@@ -1,6 +1,9 @@
 import request from "supertest";
 import { app } from "../main";
 import { EStatus } from "../enums";
+import { jest } from "@jest/globals";
+
+jest.spyOn(console, "log").mockImplementation(() => {});
 
 describe("API", () => {
 	let userId = "";
@@ -11,7 +14,7 @@ describe("API", () => {
 		app.close();
 		done();
 	});
-	it("Get users list", async () => {
+	test("Get users list", async () => {
 		await request(app)
 			.get("/api/users")
 			.then(() => {
@@ -19,7 +22,7 @@ describe("API", () => {
 				expect([]);
 			});
 	});
-	it("Create user", async () => {
+	test("Create user", async () => {
 		await request(app)
 			.post("/api/users")
 			.send({ username: "Alexey", age: 25, hobbies: ["food"] })
@@ -31,7 +34,7 @@ describe("API", () => {
 				expect(response.body.hobbies).toEqual(["food"]);
 			});
 	});
-	it("Get user", async () => {
+	test("Get user", async () => {
 		await request(app)
 			.get(`/api/users/${userId}`)
 			.then((response) => {
@@ -41,7 +44,7 @@ describe("API", () => {
 				expect(response.body.hobbies).toEqual(["food"]);
 			});
 	});
-	it("Update user", async () => {
+	test("Update user", async () => {
 		await request(app)
 			.put(`/api/users/${userId}`)
 			.send({ username: "John", age: 46, hobbies: ["alcohol"] })
@@ -52,12 +55,12 @@ describe("API", () => {
 				expect(response.body.hobbies).toEqual(["alcohol"]);
 			});
 	});
-	it("Delete user", async () => {
+	test("Delete user", async () => {
 		await request(app)
 			.delete(`/api/users/${userId}`)
 			.expect(EStatus.NO_CONTENT);
 	});
-	it("Get user", async () => {
+	test("Get user", async () => {
 		await request(app)
 			.get(`/api/users/${userId}`)
 			.then((response) => {
