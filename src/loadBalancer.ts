@@ -1,6 +1,6 @@
-import Cluster from "cluster";
-import { cpus } from "os";
-import { createServer, request } from "http";
+import Cluster from "node:cluster";
+import { cpus } from "node:os";
+import { createServer, request } from "node:http";
 import { config } from "dotenv";
 import { server } from "./server";
 

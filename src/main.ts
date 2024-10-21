@@ -1,6 +1,6 @@
 import { config } from "dotenv";
-import { createServer } from "http";
-import { createRequire } from "module";
+import { createServer } from "node:http";
+import { createRequire } from "node:module";
 import { server } from "./server";
 
 const require = createRequire(import.meta.url);

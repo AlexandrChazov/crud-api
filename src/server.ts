@@ -1,8 +1,8 @@
-import { readFile, writeFile } from "fs";
+import { readFile, writeFile } from "node:fs";
+import { IncomingMessage, ServerResponse } from "node:http";
+import { v4, validate } from "uuid";
 import { pathToDb, serverError, userId } from "./lib";
 import { EStatus } from "./enums";
-import { v4, validate } from "uuid";
-import { IncomingMessage, ServerResponse } from "http";
 
 export function server(
 	req: IncomingMessage,

@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { filename } from "./filename";
 
 export function dirname(metaUrl: string): string {
