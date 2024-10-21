@@ -1,20 +1,19 @@
-const globals = require("globals");
-const pluginJs = require("@eslint/js");
-const tseslint = require("typescript-eslint");
-const eslintConfigPrettier = require("eslint-config-prettier");
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import tseslint from "typescript-eslint";
+import eslintConfigPrettier from "eslint-config-prettier";
 
-const config = [
+export default [
 	pluginJs.configs.recommended,
 	...tseslint.configs.recommended,
 	{
-    languageOptions: { globals: globals.node },
+		languageOptions: { globals: globals.node },
 		rules: {
 			"no-unused-vars": "error",
 			"no-undef": "error",
 		},
-		files: ["src/**/*.{js}"],
+		files: ["src/**/*.{ts}"],
+		ignores: ["!src/*"],
 	},
-	eslintConfigPrettier
+	eslintConfigPrettier,
 ];
-
-module.exports = config;

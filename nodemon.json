@@ -1,0 +1,11 @@
+{
+	"restartable": "rs",
+	"watch": [ "src/**/*.js,ts" ],
+	"ignore": ["src/db", "src/__tests__"],
+	"ext": "ts,js,json",
+	"exec": "node --import ./ts-loader.js",
+	"execMap": {
+		"ts": "node --require ts-node/register"
+	},
+	"verbose": true
+}
